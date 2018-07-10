@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { Text, AsyncStorage, Alert } from 'react-native';
-import Button from './components/Button';
+import { Text } from 'react-native';
 import Card from './components/Card';
 import CardSection from './components/CardSection';
-import {Input} from './components/Input';
+import {InputWithButton} from './components/InputWithButton';
 
 class InputForm extends Component {
-  state = { value: this.props.value, error: '' };
+  constructor(props) {
+    super(props);
+    this.state = { value: props.value, error: '' };
+    this.onButtonPress = this.onButtonPress.bind(this);
+  }
 
   onButtonPress() {
-    const { value, error } = this.state;
+    const { value } = this.state;
 
     if (value.trim().length <= 0) {
       return this.setState({ error: "oops! no empty values"});
@@ -19,31 +22,22 @@ class InputForm extends Component {
     this.setState({value: ''});
   }
 
-  renderButton() {
-    return (
-      <Button onPress={this.onButtonPress.bind(this)}>Add</Button>
-    );
-  }
-
   render() {
     return (
       <Card>
         <CardSection>
-          <Input 
-            label="URL"
+          <InputWithButton 
+            label="Add"
             value={this.state.value}
             onChangeText={value => this.setState({ value })}
             placeholder="http://app-press.com"
+            onPress={this.onButtonPress}
           />
         </CardSection>
 
         <Text style={styles.errorText}>
           {this.state.error}
         </Text>
-
-        <CardSection>
-          {this.renderButton()}
-        </CardSection>
       </Card>
     );
   }
