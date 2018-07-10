@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Alert, AsyncStorage} from 'react-native';
+import {StyleSheet, ListView, View, Alert, AsyncStorage} from 'react-native';
 import Header from './src/components/header';
 import UrlList from './src/components/UrlList';
 import InputForm from './src/InputForm';
@@ -7,7 +7,8 @@ import InputForm from './src/InputForm';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { urls: [], value: '' };
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    this.state = { urls: [], ds: ds.cloneWithRows([]), value: '' };
     this.removeFromList = this.removeFromList.bind(this);
     this.addToList = this.addToList.bind(this);
   }
@@ -17,9 +18,9 @@ export default class App extends Component {
     AsyncStorage.setItem(i, url).then((res) => {
       const newList = [
         ... this.state.urls,
-        {title: i, link: url}
+        {key: i, link: url}
       ];
-      this.setState({urls: newList, value: ''});
+      this.setState({urls: newList, ds: this.state.ds.cloneWithRows(newList), value: ''});
     }).catch(err => {
       Alert.alert("Error",
         err.message, [], { cancelable: true, onDismiss: () => {} });
@@ -29,10 +30,10 @@ export default class App extends Component {
   removeFromList(key) {
     AsyncStorage.removeItem(`${key}`).then(() => {
       const newList = this.state.urls.filter((url) => {
-        return url.title !== key;
+        return url.key !== key;
       });
   
-      this.setState({ urls: newList });
+      this.setState({ urls: newList, ds: this.state.ds.cloneWithRows(newList) });
       Alert.alert('Deleted', key, [],
         { cancelable: true, onDismiss: () => {} }
       );
@@ -47,7 +48,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <Header text="URL List" />
         <InputForm value={this.state.value} onAdd={this.addToList} />
-        <UrlList urls={this.state.urls} onDelete={this.removeFromList} />
+        <UrlList urls={this.state.ds} onDelete={this.removeFromList} />
       </View>
     );
   }

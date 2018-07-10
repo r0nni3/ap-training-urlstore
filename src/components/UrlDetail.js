@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { View, Text, Image, Linking } from 'react-native';
+import React from 'react';
+import { View, Text, Linking } from 'react-native';
 import Card from './Card'
 import CardSection from './CardSection'
 import Button from './Button'
 
 const UrlDetail = ({ url, onDelete }) => {
-  const { title, link } = url;
+  const { key, link } = url;
 
   return (
     <Card>
@@ -19,7 +19,7 @@ const UrlDetail = ({ url, onDelete }) => {
         <Button onPress={() => Linking.openURL(link)}>
           open
         </Button>
-        <Button onPress={() => onDelete(title)}>
+        <Button onPress={() => onDelete(key)}>
           Remove
         </Button>
       </CardSection>

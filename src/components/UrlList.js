@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, Alert, AsyncStorage, Text, View } from 'react-native';
+import { StyleSheet, ListView, Text, View } from 'react-native';
 import UrlDetail from './UrlDetail';
 
 class UrlList extends Component {
   state = { urls: this.props.urls };
 
-  renderUrls (urls) {
-    if (urls.length > 0) {
-      return urls.map(url =>
-        <UrlDetail key={url.title} url={url} onDelete={this.props.onDelete} />
+  renderUrls ({onDelete}) {
+    return (url) => {
+      return (
+        <UrlDetail key={url.key} url={url} onDelete={onDelete} />
+      );
+    };
+  }
+
+  render () {
+    if (this.props.urls.getRowCount() > 0) {
+      const renderRow = this.renderUrls(this.props);
+      return (
+        <ListView 
+          dataSource={this.props.urls}
+          renderRow={renderRow}
+        />
       );
     }
 
@@ -16,14 +28,6 @@ class UrlList extends Component {
       <View style={styles.textContainer}>
         <Text style={styles.textHeader}>Start adding urls!</Text>
       </View>
-    );
-  }
-
-  render () {
-    return (
-      <ScrollView>
-        {this.renderUrls(this.props.urls)}
-      </ScrollView>
     );
   }
 }
