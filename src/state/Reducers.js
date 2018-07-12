@@ -3,7 +3,7 @@
  */
 
 import { combineReducers } from 'redux';
-import { ADD_URL, REMOVE_URL, LOAD_FROM_ASYNCSTORAGE } from './Types';
+import { ADD_URL, REMOVE_URL, LOAD_URLS } from './Types';
 
 function urls(state = [], action) {
   switch(action.type) {
@@ -14,7 +14,7 @@ function urls(state = [], action) {
       ];
     case REMOVE_URL:
       return state.filter( url => url.key !== action.key);
-    case LOAD_FROM_ASYNCSTORAGE:
+    case LOAD_URLS:
       return [... state, ... action.urls.map(([key, link]) => {
         return {key, link};
       })];

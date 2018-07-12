@@ -1,6 +1,6 @@
 {
   "name": "urlstorage",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -10,7 +10,8 @@
     "react": "16.4.1",
     "react-native": "0.56.0",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@app-press/eslint-config": "^2.0.2",
