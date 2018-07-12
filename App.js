@@ -5,7 +5,7 @@ import Header from './src/components/header';
 import UrlList from './src/components/UrlList';
 import InputForm from './src/InputForm';
 import { store } from './src/state';
-import { addUrl, removeUrl, loadFromAsyncStorage } from './src/state/Actions';
+import { saveOnAsyncStorage, removeFromAsyncStorage, loadFromAsyncStorage } from './src/state/Actions';
 
 export default class App extends Component {
   constructor(props) {
@@ -17,31 +17,22 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    AsyncStorage.getAllKeys().then(keys => {
-      return AsyncStorage.multiGet(keys);
-    }).then(urls => {
-      // Loads data contained on AsyncStorage
-      store.dispatch(loadFromAsyncStorage(urls));
+    store.dispatch(loadFromAsyncStorage()).then(() => {
       // Updates UI
       const state = store.getState();
       this.setState({ds: this.state.ds.cloneWithRows(state.urls), value: ''});
-      // Logging
-      console.log(urls);
     }).catch(err => {
       console.log(err);
     });
   }
 
   addToList(url) {
-    const i = `${+ new Date()}`;
-    AsyncStorage.setItem(i, url).then((res) => {
-      // Adds new url to store
-      store.dispatch(addUrl(i, url));
+    const key = `${+ new Date()}`;
+    // Async dispatch thunk
+    store.dispatch(saveOnAsyncStorage(key, url)).then((res) => {
       // Updates UI
       const state = store.getState();
       this.setState({ds: this.state.ds.cloneWithRows(state.urls), value: ''});
-      // Logging
-      console.log("Store State: ", state);
     }).catch(err => {
       Alert.alert("Error",
         err.message, [], { cancelable: true, onDismiss: () => {} });
@@ -49,19 +40,15 @@ export default class App extends Component {
   }
 
   removeFromList(key) {
-    AsyncStorage.removeItem(`${key}`).then(() => {
-      // Removes url from store
-      store.dispatch(removeUrl(key));
+    // Async dispatch thunk
+    store.dispatch(removeFromAsyncStorage(key)).then(() => {
       // Updates UI
       const state = store.getState();
       this.setState({ ds: this.state.ds.cloneWithRows(state.urls) });
-      // Logging
-      console.log('Deleted: ', key);
-      console.log(store.getState());
     }).catch(err => {
       Alert.alert("Error",
         err.message, [], { cancelable: true, onDismiss: () => {} });
-    })
+    });
   }
 
   render() {
