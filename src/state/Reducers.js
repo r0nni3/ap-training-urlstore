@@ -3,7 +3,7 @@
  */
 
 import { combineReducers } from 'redux';
-import { ADD_URL, REMOVE_URL, LOAD_URLS } from './Types';
+import { ADD_URL, REMOVE_URL, UPDATE_URL, LOAD_URLS } from './Types';
 
 function urls(state = [], action) {
   switch(action.type) {
@@ -14,6 +14,11 @@ function urls(state = [], action) {
       ];
     case REMOVE_URL:
       return state.filter( url => url.key !== action.key);
+    case UPDATE_URL:
+      return state.map( url => {
+        if (url.key === action.key) return {key: action.key, link: action.url};
+        return url;
+      });
     case LOAD_URLS:
       return [... state, ... action.urls.map(([key, link]) => {
         return {key, link};
