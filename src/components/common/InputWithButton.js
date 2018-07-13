@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, View } from 'react-native';
-import Button from './Button';
+import { Button } from './Button';
 
 const InputWithButton = (props) => {
   const { label, value, onChangeText, placeholder, isSecure, onPress } = props;
