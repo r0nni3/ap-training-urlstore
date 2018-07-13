@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import Card from './components/Card';
-import CardSection from './components/CardSection';
-import {InputWithButton} from './components/InputWithButton';
+import { Card, CardSection, InputWithButton } from './common';
 
 class InputForm extends Component {
   constructor(props) {
@@ -27,7 +25,7 @@ class InputForm extends Component {
       <Card>
         <CardSection>
           <InputWithButton 
-            label="Add"
+            label={this.props.buttonLabel}
             value={this.state.value}
             onChangeText={value => this.setState({ value })}
             placeholder="http://app-press.com"

@@ -5,10 +5,10 @@ import UrlDetail from './UrlDetail';
 class UrlList extends Component {
   state = { urls: this.props.urls };
 
-  renderUrls ({onDelete}) {
+  renderUrls ({onDelete, onPressItem}) {
     return (url) => {
       return (
-        <UrlDetail key={url.key} url={url} onDelete={onDelete} />
+        <UrlDetail key={url.key} url={url} onDelete={onDelete} onPressItem={onPressItem} />
       );
     };
   }
